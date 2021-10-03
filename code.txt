@@ -1,0 +1,89 @@
+Sub stock()
+
+    Dim stock As String
+    
+    Dim total_vol As Double
+    total_vol = 0
+    
+    Dim stock_row As Integer
+    stock_row = 2
+    
+    Dim closing As Double
+    
+    Dim yearly_change As Double
+    
+    Dim percent_change As Double
+    
+    Dim x As Long
+    x = 2
+    
+    
+    'Headers
+    Range(I1).Value = Ticker
+    Range(J1).Value = Yearly Change
+    Range(K1).Value = Percent Change
+    Range(L1).Value = Total Stock Volume
+    
+    
+    For i = 2 To 797711
+    
+        If Cells(i + 1, 1).Value  Cells(i, 1).Value Then
+        
+            
+            'Stock Name
+            stock = Cells(i, 1).Value
+            Range(I & stock_row).Value = stock
+            
+            'Total Volumn
+            total_vol = total_vol + Cells(i, 7).Value
+            Range(L & stock_row).Value = total_vol
+            
+            'Yearly Change
+            'Find Open Price
+            If Cells(x, 3).Value = 0 Then
+                For FindValue = x To i
+                    If Cells(FindValue, 3).Value  0 Then
+                    	Start = FindValue
+                    	Exit For
+                    End If
+        
+                Next FindValue
+            End If
+            'Close price
+            closing = Cells(i, 6).Value
+            
+            yearly_change = Cells(i, 6).Value - Cells(x, 3).Value
+            Range(J & stock_row).Value = yearly_change
+            
+            'Percent Change
+            percent_change = yearly_change  Cells(x, 3).Value
+            Cells(stock_row, K).Value = percent_change
+            
+            stock_row = stock_row + 1
+        
+            'Reset Values
+            stocker_row = stocker_row + 1
+            total_vol = 0
+            x = i + 1
+            yearly_change = 0
+        Else
+            total_vol = total_vol + Cells(i, 7).Value
+        
+        End If
+        
+        If Range(J & stock_row).Value = 0 Then
+            Cells(stock_row, J).Interior.ColorIndex = 10
+        Else
+            Cells(stock_row, J).Interior.ColorIndex = 3
+        End If
+        
+    Next i
+    
+    'Create Color Index'
+    If Range(J & stock_row).Value = 0 Then
+        Cells(stock_row, J).Interior.ColorIndex = 10
+    Else
+        Cells(stock_row, J).Interior.ColorIndex = 3
+    End If
+End Sub
+
